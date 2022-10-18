@@ -1,0 +1,5 @@
+**
+#ignore everything except the following files
+!Dockerfile
+!Lavalink.jar
+!application.yml

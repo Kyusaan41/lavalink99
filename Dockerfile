@@ -1,22 +1,13 @@
-FROM eclipse-temurin:18-jre-focal
+FROM eclipse-temurin:17-jdk
 
-# Run as non-root user
-RUN groupadd -g 322 lavalink && \
-    useradd -r -u 322 -g lavalink lavalink
+RUN apt-get update && apt-get install -y git
+
+WORKDIR /opt
+
+RUN git clone https://github.com/lavalink-devs/Lavalink.git
 
 WORKDIR /opt/Lavalink
 
-RUN chown -R lavalink:lavalink /opt/Lavalink
+RUN ./gradlew build --no-daemon
 
-USER lavalink
-
-# Download latest release
-RUN curl -s https://api.github.com/repos/freyacodes/Lavalink/releases/latest \
-| grep "browser_download_url.*jar" \
-| cut -d : -f 2,3 \
-| tr -d \" \
-| wget -qi -
-
-COPY . .
-
-ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2", "-Xmx4G", "-jar", "Lavalink.jar"]
+CMD ["java", "-jar", "LavalinkServer.jar"]

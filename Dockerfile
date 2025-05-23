@@ -1,13 +1,11 @@
 FROM eclipse-temurin:17-jdk
 
-RUN apt-get update && apt-get install -y git
+WORKDIR /opt/lavalink
 
-WORKDIR /opt
+ADD https://github.com/freyacodes/Lavalink/releases/download/4.0.8/Lavalink.jar Lavalink.jar
 
-RUN git clone https://github.com/lavalink-devs/Lavalink.git
+COPY application.yml .
 
-WORKDIR /opt/Lavalink
+EXPOSE 2333
 
-RUN ./gradlew build --no-daemon
-
-CMD ["java", "-jar", "LavalinkServer.jar"]
+CMD ["java", "-jar", "Lavalink.jar"]
